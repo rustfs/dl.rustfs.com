@@ -10,6 +10,9 @@ export async function fetchReleases() {
 
   try {
 
+    // 确保 data/repo 目录存在
+    await fs.mkdir(path.join(process.cwd(), 'data'), { recursive: true });
+
     for (const project of projects) {
       console.log(`Fetching ${org}/${project.repo}...`);
 
