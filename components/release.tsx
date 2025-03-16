@@ -5,7 +5,6 @@ import { PaperclipIcon } from 'lucide-react';
 
 import { Project } from "@/projects.config";
 import Markdown from "./markdown";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 
 export default function ReleaseCard(props: { project: Project, release: Release, isLatest?: boolean }) {
   const { release, project } = props;
@@ -34,34 +33,25 @@ export default function ReleaseCard(props: { project: Project, release: Release,
       {release.assets.length > 0 && (
         <div className="border-t">
           <h3 className="text-lg font-medium p-4">Assets</h3>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="px-4">File</TableHead>
-                <TableHead className="px-4">Size</TableHead>
-                <TableHead className="px-4">Download</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {release.assets.map((asset: ReleaseAsset, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-mono flex items-center gap-2 px-4">
-                    <PaperclipIcon className="w-4 h-4 text-muted-foreground" />
-                    {asset.name}
-                  </TableCell>
-                  <TableCell className="font-mono text-muted-foreground px-4">{formatBytes(asset.size)}</TableCell>
-                  <TableCell className="flex gap-2 px-4">
-                    <a href={cdnUrl(`${project.repo}/${release.tag_name}/${asset.name}`)} className="text-blue-600 hover:underline">
-                      CDN
-                    </a>
-                    <a href={asset.browser_download_url} className="text-blue-600 hover:underline">
-                      GitHub
-                    </a>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          {release.assets.map((asset: ReleaseAsset, index) => (
+            <div key={index} className="border-t py-2 md:flex items-center gap-4 px-4">
+              <div className="flex items-center gap-2 justify-between md:justify-start">
+                <div className="font-mono flex items-center gap-2">
+                  <PaperclipIcon className="w-4 h-4 text-muted-foreground" />
+                  {asset.name}
+                </div>
+                <div className="font-mono text-muted-foreground">{formatBytes(asset.size)}</div>
+              </div>
+              <div className="flex gap-2">
+                <a href={cdnUrl(`${project.repo}/${release.tag_name}/${asset.name}`)} className="text-blue-600 hover:underline">
+                  CDN
+                </a>
+                <a href={asset.browser_download_url} className="text-blue-600 hover:underline">
+                  GitHub
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>

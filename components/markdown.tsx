@@ -29,7 +29,7 @@ const CodeBlock = ({ inline, className, children, ...props }: CodeBlockProps) =>
 export default function Markdown({ children }: { children: React.ReactNode }) {
   return (
 
-    <div className="prose">
+    <div className="prose break-words">
       <ReactMarkdown
         components={{
           a: ({ href, children, ...props }) => {
