@@ -32,7 +32,7 @@ export default function ReleaseCard(props: { project: Project, release: Release,
 
       {release.assets.length > 0 && (
         <div className="border-t">
-          <h3 className="text-lg font-medium p-4">Assets</h3>
+          {/* <h3 className="text-lg font-medium p-4">Assets</h3> */}
           {release.assets.map((asset: ReleaseAsset, index) => (
             <div key={index} className="border-t py-2 md:flex items-center gap-4 px-4">
               <div className="flex items-center gap-2 justify-between md:justify-start">

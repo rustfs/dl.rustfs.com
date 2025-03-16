@@ -54,6 +54,8 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Static HTML export with Next.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ${{ steps.detect-package-manager.outputs.manager }} run build
       - name: Upload to Bucket
         uses: JohnGuan/oss-upload-action@main
