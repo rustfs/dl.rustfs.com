@@ -29,7 +29,7 @@ export async function fetchReleases() {
           continue;
         }
       } catch (error) {
-        console.error(`❌ Error checking file stats for ${project.repo}:`, error);
+        console.error(`file expired or not found: ${releasesPath}, error:`, error);
       }
 
       try {
