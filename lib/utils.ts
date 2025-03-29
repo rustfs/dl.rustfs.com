@@ -16,5 +16,5 @@ export function formatBytes(bytes: number): string {
 
 export function cdnUrl(url: string) {
   url = url.replace(/^\/+/, '');
-  return `${process.env.CDN_HOST || 'http://dl.rustfs.com/artifacts'}/${url}`;
+  return `${process.env.CDN_HOST || 'https://dl.rustfs.com/artifacts'}/${url}`;
 }
