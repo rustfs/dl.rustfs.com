@@ -9,7 +9,7 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    repo: "s3-rustfs",
+    repo: "rustfs",
     title: "控制台",
     description: "RustFS 服务器和 GUI，支持 S3 协议的文件系统。",
     links: [
