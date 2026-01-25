@@ -47,24 +47,25 @@ export default async function ProjectPage({
   return (
     <div className="relative min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white via-neutral-50 to-neutral-100">
       <div className="mx-auto flex max-w-5xl flex-col px-6 pb-16 pt-10">
-        <div className="grid grid-cols-12 border border-border/60 bg-white/70 backdrop-blur">
-          <section className="col-span-12 grid grid-cols-12">
-            <div className="col-span-12 space-y-4 border-b border-border/60 p-8 lg:col-span-8 lg:border-b-0 lg:border-r">
-              <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-                {project.title || repo}
-              </h1>
-              {project.description ? (
-                <p className="text-base text-muted-foreground">
-                  {project.description}
-                </p>
-              ) : null}
-            </div>
-
-            <div className="col-span-12 flex flex-col gap-4 p-6 lg:col-span-4">
-              <div className="flex items-center gap-2 rounded-full border border-neutral-200/70 bg-white/80 px-3 py-1 text-xs font-medium text-muted-foreground">
+        <div className="grid grid-cols-12 gap-px border border-border/60 bg-border/60">
+          <section className="col-span-12 bg-background/80 p-8 backdrop-blur">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="space-y-4">
+                <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+                  {project.title || repo}
+                </h1>
+                {project.description ? (
+                  <p className="text-base text-muted-foreground">
+                    {project.description}
+                  </p>
+                ) : null}
+              </div>
+              <div className="flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs font-medium text-muted-foreground">
                 <DownloadCloud className="h-3.5 w-3.5" />
                 {releases.length} releases
               </div>
+            </div>
+            <div className="pt-4">
               {project.links.length > 0 ? (
                 <div className="flex flex-wrap gap-3">
                   {project.links.map((link) => {
@@ -96,20 +97,24 @@ export default async function ProjectPage({
           </section>
 
           {releases.length > 0 ? (
-            <section className="col-span-12 border-t border-border/60">
-              <div className="divide-y divide-border/60">
+            <section className="col-span-12 bg-border/60">
+              <div className="grid grid-cols-12 gap-px">
                 {releases.map((release, index) => (
-                  <ReleaseCard
+                  <div
                     key={release.id}
-                    project={project}
-                    release={release}
-                    isLatest={index === 0}
-                  />
+                    className="col-span-12 bg-background/80 backdrop-blur"
+                  >
+                    <ReleaseCard
+                      project={project}
+                      release={release}
+                      isLatest={index === 0}
+                    />
+                  </div>
                 ))}
               </div>
             </section>
           ) : (
-            <div className="col-span-12 border-t border-border/60 p-8 text-sm text-muted-foreground">
+            <div className="col-span-12 bg-background/80 p-8 text-sm text-muted-foreground backdrop-blur">
               No releases found for this project.
             </div>
           )}

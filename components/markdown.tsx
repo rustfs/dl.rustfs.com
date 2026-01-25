@@ -1,17 +1,21 @@
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import remarkGfm from "remark-gfm";
 
 
-type CodeBlockProps = {
+const CodeBlock = ({
+  inline,
+  className,
+  children,
+  ...props
+}: {
   inline?: boolean;
   className?: string;
   children?: React.ReactNode;
-};
-
-const CodeBlock = ({ inline, className, children, ...props }: CodeBlockProps) => {
+}) => {
   const language = className ? className.replace(/language-/, "") : "";
   if (inline) {
     return (
@@ -31,7 +35,6 @@ const CodeBlock = ({ inline, className, children, ...props }: CodeBlockProps) =>
         style={vscDarkPlus}
         customStyle={{ margin: 0, background: "transparent" }}
         codeTagProps={{ style: { background: "transparent" } }}
-        {...props}
       >
         {React.Children.toArray(children).join("")}
       </SyntaxHighlighter>
@@ -41,14 +44,15 @@ const CodeBlock = ({ inline, className, children, ...props }: CodeBlockProps) =>
 
 export default function Markdown({ children }: { children: React.ReactNode }) {
   return (
-    <div className="prose prose-neutral max-w-none break-words text-sm leading-relaxed prose-pre:bg-transparent prose-pre:p-0 prose-pre:shadow-none prose-pre:border-0">
+    <div className="prose prose-neutral max-w-none break-words text-sm leading-relaxed dark:prose-invert prose-a:text-foreground prose-a:underline prose-a:decoration-border/60 prose-a:underline-offset-4 prose-pre:bg-transparent prose-pre:p-0 prose-pre:shadow-none prose-pre:border-0">
       <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
         components={{
-          a: ({ href, children, ...props }) => {
-            if (!href) return <a {...props}>{children}</a>;
+          a: ({ href, children: linkChildren, ...props }) => {
+            if (!href) return <a {...props}>{linkChildren}</a>;
             return (
               <Link href={href} {...props}>
-                {children}
+                {linkChildren}
               </Link>
             );
           },
