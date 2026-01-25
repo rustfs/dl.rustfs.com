@@ -1,5 +1,12 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { cdnUrl, formatBytes } from "@/lib/utils";
 import { Project } from "@/projects.config";
 import { type Release, ReleaseAsset } from "@/types";
@@ -24,14 +31,20 @@ export default function ReleaseCard(props: {
                   {release.name || release.tag_name}
                 </CardTitle>
                 {props.isLatest ? (
-                  <span className="rounded-full border border-emerald-200/80 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-700 dark:border-emerald-500/40 dark:bg-emerald-500/15 dark:text-emerald-200">
+                  <Badge
+                    variant="outline"
+                    className="rounded-full border-emerald-200/80 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-700 dark:border-emerald-500/40 dark:bg-emerald-500/15 dark:text-emerald-200"
+                  >
                     Latest
-                  </span>
+                  </Badge>
                 ) : null}
                 {release.prerelease ? (
-                  <span className="rounded-full border border-amber-200/80 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/15 dark:text-amber-200">
+                  <Badge
+                    variant="outline"
+                    className="rounded-full border-amber-200/80 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/15 dark:text-amber-200"
+                  >
                     Pre-release
-                  </span>
+                  </Badge>
                 ) : null}
               </div>
               <div className="flex items-center gap-3 text-right text-xs font-medium text-muted-foreground">
@@ -76,9 +89,12 @@ export default function ReleaseCard(props: {
                       <PaperclipIcon className="h-4 w-4 text-muted-foreground" />
                       {asset.name}
                     </a>
-                    <span className="rounded-full border border-border/70 bg-background/80 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-border/70 bg-background/80 px-2.5 py-1 text-[11px] font-medium text-muted-foreground"
+                    >
                       {formatBytes(asset.size)}
-                    </span>
+                    </Badge>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <Button asChild size="sm" variant="outline" className="gap-2">
