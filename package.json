@@ -2,6 +2,12 @@
   "name": "download",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.29.0",
+  "engines": {
+    "node": ">=20.9.0",
+    "pnpm": ">=10.28.0",
+    "npm": "please-use-pnpm"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -11,7 +17,7 @@
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
-    "@next/mdx": "^16.0.0",
+    "@next/mdx": "^16.1.4",
     "@octokit/rest": "^21.1.1",
     "@radix-ui/react-navigation-menu": "^1.2.5",
     "@radix-ui/react-slot": "^1.1.2",
@@ -20,7 +26,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.482.0",
-    "next": "^16.0.0",
+    "next": "^16.1.4",
     "next-mdx-remote": "^5.0.0",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
@@ -39,7 +45,7 @@
     "@types/react-dom": "^19",
     "@types/react-syntax-highlighter": "^15.5.13",
     "eslint": "^9",
-    "eslint-config-next": "^16.0.0",
+    "eslint-config-next": "^16.1.4",
     "tailwindcss": "^4",
     "tsx": "^4.19.3",
     "typescript": "^5"
