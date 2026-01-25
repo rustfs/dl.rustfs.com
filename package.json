@@ -2,7 +2,7 @@
   "name": "download",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.29.0",
+  "packageManager": "pnpm@10.28.1",
   "engines": {
     "node": ">=20.9.0",
     "pnpm": ">=10.28.0",
@@ -12,7 +12,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
