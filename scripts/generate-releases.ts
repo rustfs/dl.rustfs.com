@@ -3,6 +3,9 @@ import { projects } from '@/projects.config';
 import fs from 'fs/promises';
 import path from 'path';
 
+const isErrnoException = (error: unknown): error is NodeJS.ErrnoException =>
+  typeof error === 'object' && error !== null && 'code' in error;
+
 export async function fetchReleases() {
   const org = 'rustfs';
 
@@ -29,7 +32,9 @@ export async function fetchReleases() {
           continue;
         }
       } catch (error) {
-        console.error(`file expired or not found: ${releasesPath}, error:`, error);
+        if (!isErrnoException(error) || error.code !== 'ENOENT') {
+          console.error(`file check failed for ${releasesPath}:`, error);
+        }
       }
 
       try {

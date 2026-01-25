@@ -25,5 +25,14 @@ export const projects: Project[] = [
       { label: "Source", url: "https://github.com/rustfs/console", icon: GithubIcon },
       { label: "Latest Version", url: "https://dl.rustfs.com/artifacts/console/rustfs-console-latest.zip", icon: PaperclipIcon },
     ]
+  },
+  {
+    repo: "cli",
+    title: "CLI",
+    description: "RustFS CLI, 您可以使用此 CLI 便捷的管理您的文件系统，以及账号权限和系统运行状态。",
+    links: [
+      { label: "Source", url: "https://github.com/rustfs/cli", icon: GithubIcon },
+      { label: "Latest Version", url: "https://dl.rustfs.com/artifacts/rustfs-cli/rustfs-cli-latest.zip", icon: PaperclipIcon },
+    ]
   }
 ]
