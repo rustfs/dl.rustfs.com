@@ -13,7 +13,7 @@ export const projects: Project[] = [
     title: "Server",
     description: "RustFS server and GUI, a file system compatible with the S3 protocol.",
     links: [
-      { label: "Source", url: "https://github.com/rustfs/s3-rustfs", icon: GithubIcon },
+      { label: "Source", url: "https://github.com/rustfs/rustfs", icon: GithubIcon },
       // { label: "Latest Version", url: "https://dl.rustfs.com/s3-rustfs/latest.zip", icon: PaperclipIcon },
     ]
   },
