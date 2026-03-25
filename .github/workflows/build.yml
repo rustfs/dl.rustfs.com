@@ -24,9 +24,6 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-
 jobs:
   # Build job
   build:
@@ -62,11 +59,10 @@ jobs:
       - name: Export release version manifest
         run: pnpm run report:releases -- --write out/release-versions.json
       - name: Upload to Bucket
-        uses: JohnGuan/oss-upload-action@v1.0.2
-        with:
-          key-id: ${{ secrets.ALICLOUDOSS_KEY_ID }}
-          key-secret: ${{ secrets.ALICLOUDOSS_KEY_SECRET }}
-          region: oss-cn-beijing
-          bucket: rustfs-artifacts
-          assets: |
-            ./out/**:/
+        env:
+          OSS_BUCKET: rustfs-artifacts
+          OSS_KEY_ID: ${{ secrets.ALICLOUDOSS_KEY_ID }}
+          OSS_KEY_SECRET: ${{ secrets.ALICLOUDOSS_KEY_SECRET }}
+          OSS_REGION: oss-cn-beijing
+          OSS_SOURCE_DIR: out
+        run: pnpm run upload:oss
