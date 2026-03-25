@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "report:releases": "tsx scripts/report-release-versions.ts",
     "sync:releases": "tsx scripts/generate-releases.ts",
     "start": "next start",
     "lint": "eslint ."

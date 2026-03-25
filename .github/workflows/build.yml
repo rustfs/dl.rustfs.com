@@ -49,11 +49,15 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
         run: pnpm run sync:releases
+      - name: Show fetched release versions
+        run: pnpm run report:releases
       - name: Static HTML export with Next.js
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
         run: pnpm run build
+      - name: Export release version manifest
+        run: pnpm run report:releases -- --write out/release-versions.json
       - name: Upload to Bucket
         uses: JohnGuan/oss-upload-action@main
         with:
