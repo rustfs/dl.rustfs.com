@@ -4,6 +4,7 @@ export interface Project {
   repo: string;
   title: string;
   description: string;
+  cdnReleasePrefix?: string;
   links: { label: string, url: string, icon?: LucideIcon }[]
 }
 
@@ -30,6 +31,7 @@ export const projects: Project[] = [
     repo: "cli",
     title: "CLI",
     description: "RustFS CLI, use it to conveniently manage your file system, account permissions, and system status.",
+    cdnReleasePrefix: "rustfs-cli/release",
     links: [
       { label: "Source", url: "https://github.com/rustfs/cli", icon: GithubIcon },
       { label: "Latest Version", url: "https://dl.rustfs.com/artifacts/rustfs-cli/rustfs-cli-latest.zip", icon: PaperclipIcon },
