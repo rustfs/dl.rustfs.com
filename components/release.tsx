@@ -100,7 +100,7 @@ export default function ReleaseCard(props: {
                     <Button asChild size="sm" variant="outline" className="gap-2">
                       <a
                         href={cdnUrl(
-                          `${project.repo}/${release.tag_name}/${asset.name}`
+                          `${project.cdnReleasePrefix || project.repo}/${release.tag_name}/${asset.name}`
                         )}
                       >
                         <Download className="h-4 w-4" />
