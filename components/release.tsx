@@ -19,6 +19,11 @@ export default function ReleaseCard(props: {
   isLatest?: boolean;
 }) {
   const { release, project } = props;
+  const cdnReleasePrefix = project.cdnReleasePrefix || project.repo;
+  const cdnReleasePathParts =
+    project.cdnReleaseIncludeTag === false
+      ? [cdnReleasePrefix]
+      : [cdnReleasePrefix, release.tag_name];
 
   return (
     <details open={props.isLatest} className="group">
@@ -100,7 +105,7 @@ export default function ReleaseCard(props: {
                     <Button asChild size="sm" variant="outline" className="gap-2">
                       <a
                         href={cdnUrl(
-                          `${project.cdnReleasePrefix || project.repo}/${release.tag_name}/${asset.name}`
+                          [...cdnReleasePathParts, asset.name].join("/")
                         )}
                       >
                         <Download className="h-4 w-4" />
