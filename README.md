@@ -1,5 +1,31 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Cloudflare Worker for downloads
+
+The `dl.rustfs.com/artifacts/*` download path is served by a Cloudflare Worker that reads objects from the `dl-rustfs` R2 bucket.
+
+The Worker entrypoint is `worker/index.ts`, and the R2 binding is pinned in `wrangler.toml`:
+
+```toml
+[[r2_buckets]]
+binding = "R2_DOWNLOAD_BUCKET"
+bucket_name = "dl-rustfs"
+```
+
+Deploy the Worker with Wrangler from this repository:
+
+```bash
+pnpm dlx wrangler deploy
+```
+
+After deployment, verify the custom domain route:
+
+```bash
+curl -I https://dl.rustfs.com/artifacts/rustfs/release/rustfs-macos-x86_64-v1.0.0-beta.8.zip
+```
+
+The expected result is `200 OK`. If the public R2 URL works but this URL returns `404`, check the Worker logs for the requested object key. The Worker maps `/artifacts/...` directly to the R2 key `artifacts/...`.
+
 ## Getting Started
 
 First, run the development server:

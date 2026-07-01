@@ -1,0 +1,11 @@
+name = "dl-rustfs-com"
+main = "worker/index.ts"
+compatibility_date = "2026-07-01"
+
+routes = [
+  { pattern = "dl.rustfs.com/artifacts/*", zone_name = "rustfs.com" }
+]
+
+[[r2_buckets]]
+binding = "R2_DOWNLOAD_BUCKET"
+bucket_name = "dl-rustfs"
