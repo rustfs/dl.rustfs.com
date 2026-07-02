@@ -59,10 +59,11 @@ jobs:
       - name: Export release version manifest
         run: pnpm run report:releases -- --write out/release-versions.json
       - name: Upload to Bucket
+        if: ${{ vars.OSS_BUCKET != '' }}
         env:
-          OSS_BUCKET: rustfs-artifacts
+          OSS_BUCKET: ${{ vars.OSS_BUCKET }}
           OSS_KEY_ID: ${{ secrets.ALICLOUDOSS_KEY_ID }}
           OSS_KEY_SECRET: ${{ secrets.ALICLOUDOSS_KEY_SECRET }}
-          OSS_REGION: oss-cn-beijing
+          OSS_REGION: ${{ vars.OSS_REGION || 'oss-cn-beijing' }}
           OSS_SOURCE_DIR: out
         run: pnpm run upload:oss
