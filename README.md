@@ -11,6 +11,9 @@ The hourly GitHub Actions workflow compares the latest releases from
 `release-versions.json`. When a version changes, it calls a Cloudflare Deploy
 Hook so Cloudflare rebuilds the site from the current `main` branch.
 
+To verify the hook or rebuild immediately, run the `Refresh releases` workflow
+manually with `force_deploy` enabled.
+
 Create the Deploy Hook in the Cloudflare project's build settings and save its
 URL as the `CLOUDFLARE_DEPLOY_HOOK_URL` GitHub Actions secret. Treat the URL as
 a credential; do not commit it to the repository.
