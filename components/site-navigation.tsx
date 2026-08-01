@@ -83,7 +83,7 @@ export function SiteNavigation() {
             <NavigationMenuTrigger className="h-auto bg-transparent px-2 py-1 text-sm text-muted-foreground hover:bg-transparent hover:text-foreground focus:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-foreground">
               {section.label}
             </NavigationMenuTrigger>
-            <NavigationMenuContent className="w-[34rem] rounded-none p-2">
+            <NavigationMenuContent className="rounded-none p-2 md:w-[34rem]">
               <div className="grid grid-cols-2 gap-1">
                 {section.items.map((item) => (
                   <NavigationMenuLink
