@@ -1,35 +1,21 @@
-name: Build
+name: Refresh releases
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["main"]
-  release:
-    types: [published]
   schedule:
     - cron: "17 * * * *"
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages"
+  group: refresh-releases
   cancel-in-progress: false
 
 jobs:
-  # Build job
-  build:
-    permissions:
-      contents: read
+  refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -44,26 +30,56 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Refresh GitHub release data
+      - name: Fetch current release versions
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
         run: pnpm run sync:releases
-      - name: Show fetched release versions
-        run: pnpm run report:releases
-      - name: Static HTML export with Next.js
+      - name: Write candidate release manifest
+        run: pnpm run report:releases -- --write "$RUNNER_TEMP/candidate-release-versions.json"
+      - name: Check deployed release versions
+        id: release-changes
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          GITHUB_TOKEN: ${{ github.token }}
-        run: pnpm run build
-      - name: Export release version manifest
-        run: pnpm run report:releases -- --write out/release-versions.json
-      - name: Upload to Bucket
-        if: ${{ github.repository == 'rustfs/dl.rustfs.com' || vars.OSS_BUCKET != '' }}
+          DEPLOYED_MANIFEST_URL: https://dl.rustfs.com/release-versions.json
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          candidate="$RUNNER_TEMP/candidate-release-versions.json"
+          deployed="$RUNNER_TEMP/deployed-release-versions.json"
+
+          if ! curl --fail --silent --show-error --location \
+            "$DEPLOYED_MANIFEST_URL" --output "$deployed"; then
+            echo "No deployed release manifest found; a deployment is required."
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if jq --exit-status --slurpfile candidate "$candidate" '
+            def versions:
+              [.entries[] | { key: .repo, value: (.latest.tag_name // null) }]
+              | from_entries;
+            versions == ($candidate[0] | versions)
+          ' "$deployed" > /dev/null; then
+            echo "Release versions are already current."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Upstream release versions changed."
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Trigger Cloudflare deployment
+        if: steps.release-changes.outputs.changed == 'true'
         env:
-          OSS_BUCKET: ${{ vars.OSS_BUCKET || 'rustfs-artifacts' }}
-          OSS_KEY_ID: ${{ secrets.ALICLOUDOSS_KEY_ID }}
-          OSS_KEY_SECRET: ${{ secrets.ALICLOUDOSS_KEY_SECRET }}
-          OSS_REGION: ${{ vars.OSS_REGION || 'oss-cn-beijing' }}
-          OSS_SOURCE_DIR: out
-        run: pnpm run upload:oss
+          CLOUDFLARE_DEPLOY_HOOK_URL: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "$CLOUDFLARE_DEPLOY_HOOK_URL" ]]; then
+            echo "::error::CLOUDFLARE_DEPLOY_HOOK_URL is not configured"
+            exit 1
+          fi
+
+          curl --fail --silent --show-error --request POST \
+            "$CLOUDFLARE_DEPLOY_HOOK_URL" > /dev/null
+          echo "Cloudflare deployment triggered."

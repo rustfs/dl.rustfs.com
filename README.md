@@ -1,5 +1,20 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Cloudflare deployment
+
+The site is built and deployed by Cloudflare from this repository. A push to
+`main` triggers the connected Cloudflare project automatically; the generated
+static export in `out/` must not be uploaded separately to OSS or R2.
+
+The hourly GitHub Actions workflow compares the latest releases from
+`rustfs/rustfs`, `rustfs/cli`, and `rustfs/console` with the deployed
+`release-versions.json`. When a version changes, it calls a Cloudflare Deploy
+Hook so Cloudflare rebuilds the site from the current `main` branch.
+
+Create the Deploy Hook in the Cloudflare project's build settings and save its
+URL as the `CLOUDFLARE_DEPLOY_HOOK_URL` GitHub Actions secret. Treat the URL as
+a credential; do not commit it to the repository.
+
 ## Cloudflare Worker for downloads
 
 The `dl.rustfs.com/artifacts/*` download path is served by a Cloudflare Worker that reads objects from the `dl-rustfs` R2 bucket.
