@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 
+import {
+  MobileSiteNavigation,
+  SiteNavigation,
+} from "@/components/site-navigation";
 import { ThemeProvider } from "@/components/theme-provider";
 import ThemeToggle from "@/components/theme-toggle";
 import "./globals.css";
@@ -77,18 +81,7 @@ export default function RootLayout({
                   Download Center
                 </span>
               </Link>
-              <nav className="hidden items-center gap-4 text-sm font-medium text-muted-foreground md:flex">
-                <Link href="https://docs.rustfs.com/features/distributed/">Features</Link>
-                <Link href="https://docs.rustfs.com/concepts/architecture.html">Architecture</Link>
-                <Link href="https://docs.rustfs.com/features/data-lake/">Solutions</Link>
-                <Link href="https://docs.rustfs.com/features/ai">AI</Link>
-                <Link href="https://dl.rustfs.com" className="text-foreground">
-                  Download
-                </Link>
-                <Link href="https://play.rustfs.com">Demo</Link>
-                <Link href="https://docs.rustfs.com/installation/">Docs</Link>
-                <Link href="https://rustfs.dev/">Blog</Link>
-              </nav>
+              <SiteNavigation />
               <div className="flex items-center gap-3 text-sm font-medium">
                 <ThemeToggle />
                 <Link
@@ -123,6 +116,7 @@ export default function RootLayout({
                     <path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z" />
                   </svg>
                 </Link>
+                <MobileSiteNavigation />
               </div>
             </div>
           </header>
