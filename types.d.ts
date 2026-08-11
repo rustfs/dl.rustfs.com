@@ -36,6 +36,7 @@ export type ReleaseAsset = {
   created_at: string;
   updated_at: string;
   browser_download_url: string;
+  cdn_url?: string | null;
 }
 
 export type User = {

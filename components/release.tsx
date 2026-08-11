@@ -3,15 +3,13 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cdnUrl, formatBytes } from "@/lib/utils";
+import ReleaseAssetsTabs from "@/components/release-assets-tabs";
 import { Project } from "@/projects.config";
-import { type Release, ReleaseAsset } from "@/types";
-import { ChevronDown, Download, PaperclipIcon } from "lucide-react";
-import Markdown from "./markdown";
+import { type Release } from "@/types";
+import { ChevronDown, ExternalLink } from "lucide-react";
 
 export default function ReleaseCard(props: {
   project: Project;
@@ -19,11 +17,6 @@ export default function ReleaseCard(props: {
   isLatest?: boolean;
 }) {
   const { release, project } = props;
-  const cdnReleasePrefix = project.cdnReleasePrefix || project.repo;
-  const cdnReleasePathParts =
-    project.cdnReleaseIncludeTag === false
-      ? [cdnReleasePrefix]
-      : [cdnReleasePrefix, release.tag_name];
 
   return (
     <details open={props.isLatest} className="group">
@@ -67,62 +60,29 @@ export default function ReleaseCard(props: {
       </summary>
 
       <Card className="gap-0 border-0 bg-transparent py-0">
-        {release.body ? (
-          <CardContent className="bg-muted/40 px-6 py-6">
-            <Markdown>{release.body}</Markdown>
-          </CardContent>
-        ) : null}
+        <CardContent className="bg-muted/40 px-6 py-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-foreground">Changelog</p>
+              <p className="text-xs text-muted-foreground">
+                Full release notes are maintained on GitHub.
+              </p>
+            </div>
+            <Button asChild size="sm" variant="outline" className="gap-2">
+              <a href={release.html_url} target="_blank" rel="noreferrer">
+                <ExternalLink className="h-4 w-4" />
+                View on GitHub
+              </a>
+            </Button>
+          </div>
+        </CardContent>
 
         {release.assets.length > 0 ? (
-          <CardFooter className="flex flex-col items-stretch gap-4 border-t border-border/60 px-6 py-6">
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Assets
-            </div>
-            <div className="divide-y divide-border/60">
-              {release.assets.map((asset: ReleaseAsset, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-3 py-3 md:flex-row md:items-center md:justify-between"
-                >
-                  <div className="flex flex-wrap items-center gap-3">
-                    <a
-                      href={asset.browser_download_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center gap-2 font-mono text-sm text-foreground hover:underline"
-                    >
-                      <PaperclipIcon className="h-4 w-4 text-muted-foreground" />
-                      {asset.name}
-                    </a>
-                    <Badge
-                      variant="outline"
-                      className="rounded-full border-border/70 bg-background/80 px-2.5 py-1 text-[11px] font-medium text-muted-foreground"
-                    >
-                      {formatBytes(asset.size)}
-                    </Badge>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <Button asChild size="sm" variant="outline" className="gap-2">
-                      <a
-                        href={cdnUrl(
-                          [...cdnReleasePathParts, asset.name].join("/")
-                        )}
-                      >
-                        <Download className="h-4 w-4" />
-                        CDN
-                      </a>
-                    </Button>
-                    <Button asChild size="sm" variant="outline" className="gap-2">
-                      <a href={asset.browser_download_url}>
-                        <Download className="h-4 w-4" />
-                        GitHub
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardFooter>
+          <ReleaseAssetsTabs
+            cdnReleasePrefix={project.cdnReleasePrefix}
+            cdnReleaseIncludeTag={project.cdnReleaseIncludeTag}
+            release={release}
+          />
         ) : null}
       </Card>
     </details>

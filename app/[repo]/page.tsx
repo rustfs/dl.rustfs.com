@@ -1,4 +1,5 @@
 import ProjectHero from "@/components/projects/project-hero";
+import InstallationGuideBanner from "@/components/projects/installation-guide-banner";
 import ReleasesSection from "@/components/projects/releases-section";
 import PageBackground from "@/components/page-background";
 import { projects } from "@/projects.config";
@@ -48,6 +49,7 @@ export default async function ProjectPage({
       <div className="mx-auto flex max-w-5xl flex-col px-6 pb-16 pt-10">
         <div className="grid grid-cols-12 gap-px border border-border/60 bg-border/60">
           <ProjectHero project={project} releasesCount={releases.length} />
+          <InstallationGuideBanner />
           <ReleasesSection project={project} releases={releases} />
         </div>
       </div>

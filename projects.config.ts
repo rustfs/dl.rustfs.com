@@ -6,6 +6,7 @@ export interface Project {
   description: string;
   cdnReleasePrefix?: string;
   cdnReleaseIncludeTag?: boolean;
+  r2PackagesBase?: string;
   links: { label: string, url: string, icon?: LucideIcon }[]
 }
 
@@ -16,6 +17,7 @@ export const projects: Project[] = [
     description: "RustFS server and GUI, a file system compatible with the S3 protocol.",
     cdnReleasePrefix: "rustfs/release",
     cdnReleaseIncludeTag: false,
+    r2PackagesBase: "https://dl.rustfs.com/artifacts/rustfs/packages/release",
     links: [
       { label: "Source", url: "https://github.com/rustfs/rustfs", icon: GithubIcon },
       // { label: "Latest Version", url: "https://dl.rustfs.com/s3-rustfs/latest.zip", icon: PaperclipIcon },
