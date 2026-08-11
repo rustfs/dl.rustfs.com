@@ -1,4 +1,5 @@
 import { getReleases } from '@/lib/github';
+import { fetchExistingR2Packages } from '@/lib/r2-packages';
 import { projects } from '@/projects.config';
 import fs from 'fs/promises';
 import path from 'path';
@@ -39,6 +40,17 @@ export async function fetchReleases() {
 
       try {
         const releases = await getReleases(project.repo);
+
+        if (project.r2PackagesBase) {
+          for (const release of releases) {
+            const r2Assets = await fetchExistingR2Packages(release.tag_name);
+
+            if (r2Assets.length > 0) {
+              release.assets.push(...r2Assets);
+            }
+          }
+        }
+
         await fs.writeFile(
           path.join(process.cwd(), 'data', project.repo, 'releases.json'),
           JSON.stringify(releases, null, 2),
