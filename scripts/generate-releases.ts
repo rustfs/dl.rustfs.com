@@ -9,7 +9,6 @@ import {
 } from '@/lib/release-fallback';
 import { fetchExistingR2Packages } from '@/lib/r2-packages';
 import { projects } from '@/projects.config';
-import type { Release } from '@/types';
 import fs from 'fs/promises';
 import path from 'path';
 import { pathToFileURL } from 'url';
@@ -19,7 +18,7 @@ const isErrnoException = (error: unknown): error is NodeJS.ErrnoException =>
 
 const RELEASE_CACHE_TTL_MS = 60 * 60 * 1000;
 
-async function writeReleases(repo: string, releases: Release[]) {
+async function writeReleases(repo: string, releases: unknown) {
   const releasesPath = dataReleasesPath(repo);
   await fs.mkdir(path.dirname(releasesPath), { recursive: true });
   await fs.writeFile(releasesPath, JSON.stringify(releases, null, 2), 'utf8');
