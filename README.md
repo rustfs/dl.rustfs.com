@@ -6,6 +6,35 @@ The site is built and deployed by Cloudflare from this repository. A push to
 `main` triggers the connected Cloudflare project automatically; the generated
 static export in `out/` must not be uploaded separately to OSS or R2.
 
+### GitHub token (required for live release data)
+
+`next build` calls the GitHub Releases API for `rustfs/rustfs`, `rustfs/console`,
+and `rustfs/cli`. Unauthenticated requests are limited to 60 req/hour per IP.
+Cloudflare shared build IPs are usually already over that quota, so builds
+without a token typically get `403` rate-limit responses.
+
+Set a secret/environment variable in the **Cloudflare project** (not only in
+GitHub Actions):
+
+1. Open Workers Builds / Pages → the `dl.rustfs.com` project → **Settings** →
+   **Variables / Secrets**.
+2. Add `GH_TOKEN` (preferred) or `GITHUB_TOKEN`.
+3. Use a token that can read public repository releases:
+   - Classic PAT: `public_repo`
+   - Fine-grained PAT: **Contents: Read** on `rustfs/rustfs`, `rustfs/console`,
+     and `rustfs/cli`
+
+Repository code cannot inject this Cloudflare dashboard secret. Maintainers
+must add it in the Cloudflare UI. The hourly GitHub Actions workflow already
+sets `GH_TOKEN` / `GITHUB_TOKEN`; that path is separate from the Cloudflare
+build environment.
+
+If the API is rate-limited or the token is missing, the build falls back to
+the last-known JSON under `data/<repo>/releases.json` (when present) or the
+committed snapshots in `fallback/releases/`, and continues with a loud
+warning instead of failing `next build`. Those snapshots can be stale; set
+the Cloudflare secret so production builds fetch live releases.
+
 The hourly GitHub Actions workflow compares the latest releases from
 `rustfs/rustfs`, `rustfs/cli`, and `rustfs/console` with the deployed
 `release-versions.json`. When a version changes, it calls a Cloudflare Deploy
